@@ -54,4 +54,19 @@
         android:title="@string/wifi_ip_settings"
         android:summary="@string/summary_placeholder"/>
 
+    <!-- Time sync is configured here because this is the screen a user is already on when setting
+         up a static-address or locked-down network, which is where the NTP server most often needs
+         changing. Applies to DHCP sites too, so it sits outside the IP
+         configuration rather than inside the static-IP dialog. -->
+    <PreferenceCategory
+        android:key="ethernet_time"
+        android:title="@string/ethernet_time_category_title">
+
+        <Preference
+            android:key="ethernet_ntp_server"
+            android:title="@string/ethernet_ntp_title"
+            android:summary="@string/summary_placeholder"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

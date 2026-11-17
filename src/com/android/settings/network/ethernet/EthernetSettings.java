@@ -49,7 +49,9 @@ public class EthernetSettings extends DashboardFragment {
     private static final String KEY_CURRENT_IP = "ethernet_current_ip";
     private static final String KEY_CURRENT_GATEWAY = "ethernet_current_gateway";
     private static final String KEY_CURRENT_DNS = "ethernet_current_dns";
+    private static final String KEY_NTP_SERVER = "ethernet_ntp_server";
     private static final String DIALOG_TAG = "EthernetIpConfigDialog";
+    private static final String NTP_DIALOG_TAG = "NtpServerDialog";
 
     private EthernetInterfaceHelper mEthernetHelper;
     private Preference mStatusPreference;
@@ -57,6 +59,7 @@ public class EthernetSettings extends DashboardFragment {
     private Preference mCurrentIpPreference;
     private Preference mCurrentGatewayPreference;
     private Preference mCurrentDnsPreference;
+    private Preference mNtpServerPreference;
 
     @Override
     public void onAttach(Context context) {
@@ -79,11 +82,22 @@ public class EthernetSettings extends DashboardFragment {
             dialog.show(getFragmentManager(), DIALOG_TAG);
             return true;
         }
+        if (KEY_NTP_SERVER.equals(preference.getKey())) {
+            final NtpServerDialog dialog = NtpServerDialog.newInstance();
+            dialog.setTargetFragment(this, 0 /* requestCode */);
+            dialog.show(getFragmentManager(), NTP_DIALOG_TAG);
+            return true;
+        }
         return super.onPreferenceTreeClick(preference);
     }
 
     /** Called by the IP config dialog after a successful write to refresh the summaries. */
     public void onIpConfigurationUpdated() {
+        updateSummaries();
+    }
+
+    /** Called by the NTP server dialog after a successful write to refresh the summary. */
+    public void onNtpServerUpdated() {
         updateSummaries();
     }
 
@@ -102,6 +116,16 @@ public class EthernetSettings extends DashboardFragment {
         }
         if (mCurrentDnsPreference == null) {
             mCurrentDnsPreference = findPreference(KEY_CURRENT_DNS);
+        }
+        if (mNtpServerPreference == null) {
+            mNtpServerPreference = findPreference(KEY_NTP_SERVER);
+        }
+        if (mNtpServerPreference != null) {
+            final String ntpServer = NtpServerDialog.getConfiguredServer(getContext());
+            mNtpServerPreference.setSummary(TextUtils.isEmpty(ntpServer)
+                    ? getString(R.string.ethernet_ntp_summary_default,
+                            NtpServerDialog.getDefaultServers(getContext()))
+                    : ntpServer);
         }
         final String iface = mEthernetHelper.getInterfaceName();
         final IpConfiguration config = mEthernetHelper.getConfiguration();

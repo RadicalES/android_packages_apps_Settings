@@ -10766,6 +10766,24 @@
     <string name="ethernet_config_saved">Ethernet settings saved</string>
     <!-- Toast shown when Ethernet IP settings could not be saved [CHAR LIMIT=NONE] -->
     <string name="ethernet_config_failed">Unable to save Ethernet settings</string>
+    <!-- Title for the time-sync group on the Ethernet screen [CHAR LIMIT=40] -->
+    <string name="ethernet_time_category_title">Time sync</string>
+    <!-- Title for the NTP server setting [CHAR LIMIT=40] -->
+    <string name="ethernet_ntp_title">NTP server</string>
+    <!-- Summary shown when no NTP server is configured [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_summary_default">Default (<xliff:g id="server" example="ntp://time.android.com">%1$s</xliff:g>)</string>
+    <!-- Explanation at the top of the NTP server dialog [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_dialog_message">Time server used to set the clock. Set this on sites where the default cannot be reached, such as a static address or a network that blocks outbound time sync. Separate several servers with \u0022|\u0022.</string>
+    <!-- Footer of the NTP server dialog naming the built-in default [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_dialog_default">Leave empty to use the default (<xliff:g id="server" example="ntp://time.android.com">%1$s</xliff:g>).</string>
+    <!-- Hint text in the NTP server field [CHAR LIMIT=60] -->
+    <string name="ethernet_ntp_hint">Host name or IP address</string>
+    <!-- Toast shown when the NTP server is saved [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_saved">NTP server saved</string>
+    <!-- Toast shown when the NTP server could not be saved [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_save_failed">Unable to save the NTP server</string>
+    <!-- Toast shown when the entered NTP server is not usable [CHAR LIMIT=NONE] -->
+    <string name="ethernet_ntp_invalid">Enter a host name or IP address, or ntp://host:port</string>
 
     <!-- Format string for amount of cellular data used [CHAR LIMIT=30] -->
     <string name="cell_data_template"><xliff:g id="amount" example="1 GB">^1</xliff:g> mobile data</string>
