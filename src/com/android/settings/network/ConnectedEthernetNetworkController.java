@@ -19,6 +19,7 @@ package com.android.settings.network;
 import static com.android.settings.network.InternetUpdater.INTERNET_ETHERNET;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import androidx.lifecycle.Lifecycle;
@@ -49,7 +50,12 @@ public class ConnectedEthernetNetworkController extends AbstractPreferenceContro
 
     @Override
     public boolean isAvailable() {
-        return mInternetType == INTERNET_ETHERNET;
+        // On a device with Ethernet, keep the entry visible even when the cable is
+        // unplugged or a bad static IP takes the link down; otherwise it vanishes
+        // and there is no way back in to fix the configuration.
+        return mInternetType == INTERNET_ETHERNET
+                || mContext.getPackageManager().hasSystemFeature(
+                        PackageManager.FEATURE_ETHERNET);
     }
 
     @Override

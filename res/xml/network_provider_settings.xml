@@ -38,6 +38,7 @@
 
     <Preference
         android:key="connected_ethernet_network"
+        android:fragment="com.android.settings.network.ethernet.EthernetSettings"
         android:title="@string/ethernet"
         android:summary="@string/to_switch_networks_disconnect_ethernet"
         android:icon="@drawable/ic_settings_ethernet"/>

@@ -10756,6 +10756,16 @@
 
     <!-- Label for section about ethernet in data usage screen [CHAR LIMIT=60] -->
     <string name="ethernet">Ethernet</string>
+    <!-- Title for the Ethernet interface status line [CHAR LIMIT=40] -->
+    <string name="ethernet_status_title">Interface</string>
+    <!-- Title for the read-only current-configuration group [CHAR LIMIT=40] -->
+    <string name="ethernet_current_config_title">Current configuration</string>
+    <!-- Title for the DNS servers line [CHAR LIMIT=40] -->
+    <string name="ethernet_dns_title">DNS</string>
+    <!-- Toast shown when Ethernet IP settings are saved [CHAR LIMIT=NONE] -->
+    <string name="ethernet_config_saved">Ethernet settings saved</string>
+    <!-- Toast shown when Ethernet IP settings could not be saved [CHAR LIMIT=NONE] -->
+    <string name="ethernet_config_failed">Unable to save Ethernet settings</string>
 
     <!-- Format string for amount of cellular data used [CHAR LIMIT=30] -->
     <string name="cell_data_template"><xliff:g id="amount" example="1 GB">^1</xliff:g> mobile data</string>
