@@ -11169,6 +11169,10 @@
     <string name="adb_authorization_timeout_title">Disable adb authorization timeout</string>
     <!-- [CHAR LIMIT=NONE] Setting summary explaining the disablement of the automatic adb authorization timeout. -->
     <string name="adb_authorization_timeout_summary">Disable automatic revocation of adb authorizations for systems that have not reconnected within the default (7 days) or user-configured (minimum 1 day) amount of time.</string>
+    <!-- [CHAR LIMIT=50] Setting title to enable network adb (adb over TCP). -->
+    <string name="ethernet_adb_title">Ethernet debugging</string>
+    <!-- [CHAR LIMIT=NONE] Setting summary explaining network adb. -->
+    <string name="ethernet_adb_summary">Enable adb over the network (device-ip:5555)</string>
 
     <!-- [CHAR LIMIT=25] Title of developer tile to toggle sensors -->
     <string name="sensors_off_quick_settings_title">Sensors Off</string>

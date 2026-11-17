@@ -195,6 +195,11 @@
             android:summary="@string/adb_authorization_timeout_summary" />
 
         <SwitchPreferenceCompat
+            android:key="ethernet_adb_debugging"
+            android:title="@string/ethernet_adb_title"
+            android:summary="@string/ethernet_adb_summary" />
+
+        <SwitchPreferenceCompat
             android:key="enable_terminal"
             android:title="@string/enable_terminal_title"
             android:summary="@string/enable_terminal_summary" />
