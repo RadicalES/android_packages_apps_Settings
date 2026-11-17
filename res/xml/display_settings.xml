@@ -147,6 +147,22 @@
             settings:keywords="@string/keywords_auto_rotate"
             settings:controller="com.android.settings.display.DeviceStateAutoRotateOverviewController"/>
 
+        <!--
+            Fixed screen orientation for displays that have no orientation sensor.
+            Writes Settings.System.USER_ROTATION and locks ACCELEROMETER_ROTATION off.
+          -->
+        <ListPreference
+            android:key="screen_orientation_fixed"
+            android:title="@string/screen_orientation_title"
+            android:summary="@string/summary_placeholder"
+            android:entries="@array/screen_orientation_entries"
+            android:entryValues="@array/screen_orientation_values"/>
+
+        <SwitchPreference
+            android:key="keep_screen_on"
+            android:title="@string/keep_screen_on_title"
+            android:summary="@string/keep_screen_on_summary"/>
+
         <Preference
             android:key="screen_resolution"
             android:title="@string/screen_resolution_title"
