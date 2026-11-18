@@ -199,7 +199,8 @@ public class TetherSettings extends RestrictedDashboardFragment
 
         final boolean usbAvailable = mUsbRegexs.length != 0;
         final boolean bluetoothAvailable = adapter != null && mBluetoothRegexs.length != 0;
-        final boolean ethernetAvailable = (mEm != null);
+        final boolean ethernetAvailable = (mEm != null)
+                && getResources().getBoolean(R.bool.config_show_ethernet_tethering);
 
         if (!usbAvailable || Utils.isMonkeyRunning()) {
             getPreferenceScreen().removePreference(mUsbTether);
@@ -680,7 +681,9 @@ public class TetherSettings extends RestrictedDashboardFragment
 
                     final EthernetManager em =
                             context.getSystemService(EthernetManager.class);
-                    final boolean ethernetAvailable = (em != null);
+                    final boolean ethernetAvailable = (em != null)
+                            && context.getResources()
+                                    .getBoolean(R.bool.config_show_ethernet_tethering);
                     if (!ethernetAvailable) {
                         keys.add(KEY_ENABLE_ETHERNET_TETHERING);
                     }
