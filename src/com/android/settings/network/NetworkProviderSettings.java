@@ -437,12 +437,6 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                     new ConnectedEthernetNetworkController(getContext(), getSettingsLifecycle());
         }
         mConnectedEthernetNetworkController.displayPreference(getPreferenceScreen());
-        // "To switch networks, disconnect ethernet": not when there is nothing to switch to.
-        if (!hasWifiManager() && !showAnySubscriptionInfo(getContext())) {
-            final Preference ethernet =
-                    findPreference(ConnectedEthernetNetworkController.KEY);
-            if (ethernet != null) ethernet.setSummary(null);
-        }
     }
 
     private void addWifiSwitchPreferenceController() {

@@ -21,6 +21,7 @@ import static com.android.settings.network.InternetUpdater.INTERNET_ETHERNET;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.Preference;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceScreen;
 import com.android.settings.R;
 import com.android.settingslib.Utils;
 import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.utils.ThreadUtils;
 
 /**
  * PreferenceController to show the connected ethernet network.
@@ -73,6 +75,23 @@ public class ConnectedEthernetNetworkController extends AbstractPreferenceContro
                     Utils.getColorAttr(mContext, android.R.attr.colorControlActivated));
             mPreference.setIcon(drawable);
         }
+        updateSummary();
+    }
+
+    /**
+     * With Wi-Fi or a SIM the entry keeps its hint ("To switch networks, disconnect
+     * ethernet"). Without either there is nothing to switch to, so it shows whether
+     * Ethernet is connected instead.
+     */
+    private void updateSummary() {
+        if (mPreference == null || hasOtherNetworks()) return;
+        mPreference.setSummary(mInternetType == INTERNET_ETHERNET
+                ? R.string.network_connected : R.string.network_disconnected);
+    }
+
+    private boolean hasOtherNetworks() {
+        return mContext.getSystemService(WifiManager.class) != null
+                || SubscriptionUtil.isSimHardwareVisible(mContext);
     }
 
     /**
@@ -82,8 +101,12 @@ public class ConnectedEthernetNetworkController extends AbstractPreferenceContro
      */
     public void onInternetTypeChanged(@InternetUpdater.InternetType int internetType) {
         mInternetType = internetType;
-        if (mPreference != null) {
-            mPreference.setVisible(isAvailable());
-        }
+        // Called on the connectivity thread; preferences may only change on the main thread.
+        ThreadUtils.postOnMainThread(() -> {
+            if (mPreference != null) {
+                mPreference.setVisible(isAvailable());
+            }
+            updateSummary();
+        });
     }
 }
