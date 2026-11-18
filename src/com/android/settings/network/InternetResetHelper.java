@@ -117,7 +117,7 @@ public class InternetResetHelper implements LifecycleObserver {
 
     @VisibleForTesting
     protected void updateWifiStateChange() {
-        if (!mIsWifiReady && mWifiManager.isWifiEnabled()) {
+        if (!mIsWifiReady && mWifiManager != null && mWifiManager.isWifiEnabled()) {
             Log.d(TAG, "The Wi-Fi subsystem is done for recovery.");
             mIsWifiReady = true;
             resumePreferences();
@@ -175,7 +175,8 @@ public class InternetResetHelper implements LifecycleObserver {
             return;
         }
         showResettingAndSendTimeoutChecks();
-        mIsWifiReady = !mWifiManager.isWifiEnabled();
+        // No Wi-Fi radio: no WifiManager, nothing to wait for.
+        mIsWifiReady = mWifiManager == null || !mWifiManager.isWifiEnabled();
         mRecoveryWorker.triggerRestart();
     }
 

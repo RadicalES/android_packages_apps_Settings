@@ -344,7 +344,12 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                 if (fixConnectivityItem == null) {
                     return;
                 }
-                fixConnectivityItem.setVisible(!mIsGuest && (!isAirplaneModeOn || isWifiEnabled));
+                // Resetting restarts Wi-Fi and mobile data; with neither (Ethernet-only
+                // devices) there is nothing to reset.
+                boolean hasResettableRadio =
+                        hasWifiManager() || showAnySubscriptionInfo(getContext());
+                fixConnectivityItem.setVisible(hasResettableRadio && !mIsGuest
+                        && (!isAirplaneModeOn || isWifiEnabled));
             }
         };
     }
@@ -378,6 +383,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         // (no WifiManager) its controllers have nothing to work on.
         if (!hasWifiManager()) {
             mConfigureWifiSettingsPreference.setVisible(false);
+            mSavedNetworksPreference.setVisible(false);
         }
         mAddWifiNetworkPreference = findPreference(PREF_KEY_ADD_WIFI_NETWORK);
         // Hide mAddWifiNetworkPreference by default. updateWifiEntryPreferences() will add it back
@@ -431,14 +437,25 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                     new ConnectedEthernetNetworkController(getContext(), getSettingsLifecycle());
         }
         mConnectedEthernetNetworkController.displayPreference(getPreferenceScreen());
+        // "To switch networks, disconnect ethernet": not when there is nothing to switch to.
+        if (!hasWifiManager() && !showAnySubscriptionInfo(getContext())) {
+            final Preference ethernet =
+                    findPreference(ConnectedEthernetNetworkController.KEY);
+            if (ethernet != null) ethernet.setSummary(null);
+        }
     }
 
     private void addWifiSwitchPreferenceController() {
+        if (!hasWifiManager()) {
+            // No Wi-Fi radio: the switch would have no controller and nothing to switch.
+            final Preference wifiToggle = findPreference(PREF_KEY_WIFI_TOGGLE);
+            if (wifiToggle != null) wifiToggle.setVisible(false);
+            return;
+        }
         if (isCatalystEnabled()) {
             Log.i(TAG, "WifiSwitchPreferenceController bypassed since Catalyst is enabled!");
             return;
         }
-        if (!hasWifiManager()) return;
         if (mWifiSwitchPreferenceController == null) {
             mWifiSwitchPreferenceController =
                     new WifiSwitchPreferenceController(getContext(), getSettingsLifecycle());
@@ -449,7 +466,8 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
     private void checkConnectivityRecovering() {
         mInternetResetHelper = new InternetResetHelper(getContext(), getLifecycle(),
                 mNetworkMobileProviderController,
-                findPreference(WifiSwitchPreferenceController.KEY),
+                // Reset shows the Wi-Fi switch again when done; not without Wi-Fi.
+                hasWifiManager() ? findPreference(WifiSwitchPreferenceController.KEY) : null,
                 mConnectedWifiEntryPreferenceCategory,
                 mFirstWifiEntryPreferenceCategory,
                 mWifiEntryPreferenceCategory,
@@ -1339,7 +1357,14 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
             }
 
             final WifiManager wifiManager = context.getSystemService(WifiManager.class);
-            if (wifiManager == null) return keys;
+            if (wifiManager == null) {
+                // No Wi-Fi radio: none of the Wi-Fi entries are shown.
+                keys.add(PREF_KEY_WIFI_TOGGLE);
+                keys.add(PREF_KEY_CONFIGURE_NETWORK_SETTINGS);
+                keys.add(PREF_KEY_SAVED_NETWORKS);
+                keys.add(PREF_KEY_ADD_WIFI_NETWORK);
+                return keys;
+            }
 
             if (WifiSavedConfigUtils.getAllConfigsCount(context, wifiManager) == 0) {
                 keys.add(PREF_KEY_SAVED_NETWORKS);
