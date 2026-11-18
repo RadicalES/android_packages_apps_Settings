@@ -106,7 +106,7 @@ public class WifiP2pPreferenceController extends AbstractPreferenceController
         }
     }
     private boolean isWifiP2pAvailable() {
-        return mWifiManager.isWifiEnabled() && mIsWifiDirectAllow;
+        return mWifiManager != null && mWifiManager.isWifiEnabled() && mIsWifiDirectAllow;
     }
 
 }

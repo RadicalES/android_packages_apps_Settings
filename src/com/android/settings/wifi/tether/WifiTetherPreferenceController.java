@@ -97,7 +97,8 @@ public class WifiTetherPreferenceController extends AbstractPreferenceController
         if (lifecycle != null) {
             lifecycle.addObserver(this);
         }
-        if (initSoftApManager) {
+        // No Wi-Fi radio: no WifiManager, and no SoftAP to listen to.
+        if (initSoftApManager && mWifiManager != null) {
             initWifiTetherSoftApManager();
         }
     }

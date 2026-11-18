@@ -374,6 +374,11 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         mWifiEntryPreferenceCategory = findPreference(PREF_KEY_ACCESS_POINTS);
         mConfigureWifiSettingsPreference = findPreference(PREF_KEY_CONFIGURE_NETWORK_SETTINGS);
         mSavedNetworksPreference = findPreference(PREF_KEY_SAVED_NETWORKS);
+        // Network preferences is the Wi-Fi preferences page; without a Wi-Fi radio
+        // (no WifiManager) its controllers have nothing to work on.
+        if (!hasWifiManager()) {
+            mConfigureWifiSettingsPreference.setVisible(false);
+        }
         mAddWifiNetworkPreference = findPreference(PREF_KEY_ADD_WIFI_NETWORK);
         // Hide mAddWifiNetworkPreference by default. updateWifiEntryPreferences() will add it back
         // later when appropriate.

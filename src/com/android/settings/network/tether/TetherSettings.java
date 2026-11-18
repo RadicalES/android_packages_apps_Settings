@@ -293,7 +293,8 @@ public class TetherSettings extends RestrictedDashboardFragment
     void setTopIntroPreferenceTitle() {
         final Preference topIntroPreference = findPreference(KEY_TETHER_PREFS_TOP_INTRO);
         final WifiManager wifiManager = mContext.getSystemService(WifiManager.class);
-        if (wifiManager.isStaApConcurrencySupported()) {
+        // No Wi-Fi radio (Ethernet-only devices): no WifiManager.
+        if (wifiManager != null && wifiManager.isStaApConcurrencySupported()) {
             topIntroPreference.setTitle(R.string.tethering_footer_info_sta_ap_concurrency);
         } else {
             topIntroPreference.setTitle(R.string.tethering_footer_info);

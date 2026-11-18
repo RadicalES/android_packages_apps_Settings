@@ -69,6 +69,12 @@ public class ConfigureWifiSettings extends DashboardFragment {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        // Every preference here is a Wi-Fi setting; without a Wi-Fi radio (no
+        // WifiManager) there is nothing to show, and the controllers assume one.
+        if (!hasWifiManager(getContext())) {
+            getActivity().finish();
+            return;
+        }
         getActivity().setTitle(R.string.network_and_internet_preferences_title);
 
         if (isGuestUser(getContext())) return;
@@ -145,11 +151,15 @@ public class ConfigureWifiSettings extends DashboardFragment {
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
             new BaseSearchIndexProvider(R.xml.wifi_configure_settings) {
                 protected boolean isPageSearchEnabled(Context context) {
-                    if (isGuestUser(context)) return false;
+                    if (isGuestUser(context) || !hasWifiManager(context)) return false;
                     return context.getResources()
                             .getBoolean(R.bool.config_show_wifi_settings);
                 }
             };
+
+    private static boolean hasWifiManager(Context context) {
+        return context != null && context.getSystemService(WifiManager.class) != null;
+    }
 
     private static boolean isGuestUser(Context context) {
         if (context == null) return false;
